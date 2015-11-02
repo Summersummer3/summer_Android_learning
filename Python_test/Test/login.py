@@ -1,10 +1,9 @@
 # -*- coding: utf_8 -*-
-
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4 import QtCore, QtGui
-import json, socket, time, sys, PyQt4
-import Test.main,Test.manage
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+from PyQt4.QtGui import QMessageBox
+import json, socket, time
+import main,manage
 
 try:    
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -45,7 +44,7 @@ class Ui_Dialog(object):
         self.pushButton = QtGui.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(170, 200, 75, 31))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
-        self.pushButton.clicked.connect(self.print)
+        self.pushButton.clicked.connect(self.echo())
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -56,14 +55,14 @@ class Ui_Dialog(object):
         self.label_3.setText(_translate("Dialog", "欢迎来到银行管理系统", None))
         self.pushButton.setText(_translate("Dialog", "登陆", None))
         
-    def print(self):
+    def echo(self):
         
-        str1 = self.lineEdit.text()
-        str2 = self.lineEdit_2.text()
+        str1 = str(self.lineEdit.text())
+        str2 = str(self.lineEdit_2.text())
         if(str1=='root' and str2=='root'):
             self.dialog.hide()
             MainWindow1 = QtGui.QMainWindow()
-            ui = Test.manage.Ui_MainWindow()
+            ui = manage.Ui_MainWindow()
             ui.setupUi(MainWindow1)
             MainWindow1.show()
                 
@@ -79,23 +78,23 @@ class Ui_Dialog(object):
             sock.send(out)
             if(sock.recv(1024).decode('utf_8')=='1'):
             #QtCore.QObject.connect( self.pushButton, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT(quit()))
-                
+
                 self.dialog.hide()
                 MainWindow = QtGui.QMainWindow()
-                ui = Test.main.Ui_MainWindow()
+                ui = main.Ui_MainWindow()
                 ui.setupUi(MainWindow)
                 MainWindow.show()
-                
+
                 MainWindow.focusInEvent()   #ʹ保持的方法！
-                
-                
-                
+
+
+
             else:
                 msg_box = QMessageBox(QMessageBox.Warning, "登陆失败", "账户名或密码错误")
                 msg_box.exec_()
-                
+
             sock.close()
-        
+
 if __name__ == "__main__":
 
     import sys
